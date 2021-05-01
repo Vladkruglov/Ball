@@ -3,6 +3,7 @@ import random
 import time
 class Ball:
     def __init__(self, canvas, paddle1, paddle2, color):
+        "Initialize ball settings"
         self.canvas = canvas
         self.paddle1 = paddle1
         self.id = canvas.create_oval(-7.5, -7.5, 7.5, 7.5, fill=color, outline="darkgreen")
@@ -11,23 +12,29 @@ class Ball:
         random.shuffle(starts)
         self.x1 = starts[0]
         clor = [-1.5, 1.5]
+        self.side = 'BLU'
         self.y1 = random.choice(clor)
+        if self.y1 == 1.5:
+            self.side = 'RED'
         self.canvas_height = self.canvas.winfo_height()
         self.paddle2 = paddle2
         self.hit_red = False
         self.hit_blu = False
         self.canvas_width = self.canvas.winfo_width()
     def hit_paddle1(self, pos):
+        "Locates paddle1 hits"
         paddle_pos = self.canvas.coords(self.paddle1.id)             
         if pos[2] >= paddle_pos[0] and pos[0] <= paddle_pos[2]:          
             if pos[3] >= paddle_pos[1] and pos[3] <= paddle_pos[3]:
                 return True
     def hit_paddle2(self, pos):
+        "Locates paddle2 hits"
         paddle_pos = self.canvas.coords(self.paddle2.id)
         if pos[2] >= paddle_pos[0] and pos[0] <= paddle_pos[2]:
             if pos[1] <= paddle_pos[3] and pos[1] >= paddle_pos[1]:
                 return True
     def draw(self):
+        "Draws ball"
         self.canvas.move(self.id, self.x1, self.y1)
         pos = self.canvas.coords(self.id)
         if pos[1] <= 0:
@@ -46,12 +53,14 @@ class Ball:
             self.x1 = -3
 
     def counterred(self, cou):
+        "Counts hits for RED team"
         pos = self.canvas.coords(self.id)
         if self.hit_paddle1(pos) == True:
             cou = cou + 1
         return cou
     
     def counterblu(self, cou):
+        "Counts hits for BLU team"
         pos = self.canvas.coords(self.id)
         if self.hit_paddle2(pos) == True:
             cou = cou + 1
@@ -60,6 +69,7 @@ class Ball:
         
 class Paddle1:
     def __init__(self, canvas, color):
+        "Initialize paddle1 settings"
         self.canvas = canvas
         self.id = canvas.create_rectangle(0, 0, 100, 5, fill=color, outline="darkred")
         self.canvas.move(self.id, 300, 672)
@@ -67,9 +77,8 @@ class Paddle1:
         self.canvas_width = self.canvas.winfo_width()
         self.canvas.bind_all('<KeyPress-Left>', self.turn_left1)
         self.canvas.bind_all('<KeyPress-Right>', self.turn_right1)
-    def pause(self, evt):
-        time.sleep(0.0000001)
     def draw(self):
+        "Draws RED paddle"
         self.canvas.move(self.id, self.x, 0)
         pos = self.canvas.coords(self.id)
         if pos[0] <= 0:
@@ -77,12 +86,15 @@ class Paddle1:
         elif pos[2] >= self.canvas_width:
             self.x = 0
     def turn_left1(self, evt):
+        "Moves paddle left"
         self.x = -3
     def turn_right1(self, evt):
+        "Moves paddle right"
         self.x = 3
 
 class Paddle2:
     def __init__(self, canvas, color):
+        "Initialize BLU team paddle"
         self.canvas = canvas
         self.id = canvas.create_rectangle(0, 0, 100, 5, fill=color, outline="darkblue")
         self.canvas.move(self.id, 300, 28)
@@ -90,9 +102,8 @@ class Paddle2:
         self.canvas_width = self.canvas.winfo_width()
         self.canvas.bind_all('a', self.turn_left1)
         self.canvas.bind_all('d', self.turn_right1)
-    def pause(self, evt):
-        time.sleep(0.0000001)
     def draw(self):
+        "Draws BLU paddle"
         self.canvas.move(self.id, self.x, 0)
         pos = self.canvas.coords(self.id)
         if pos[0] <= 0:
@@ -100,8 +111,10 @@ class Paddle2:
         elif pos[2] >= self.canvas_width:
             self.x = 0
     def turn_left1(self, evt):
+        "Turns paddle left"
         self.x = -3
     def turn_right1(self, evt):
+        "Turns paddle right"
         self.x = 3
 
 tk = Tk()
@@ -126,6 +139,7 @@ paddle2.draw()
 tk.update_idletasks()
 tk.update()
 time.sleep(5)
+print("Started with: {}".format(ball.side))
 while True:
     if ball.hit_red == False and ball.hit_blu == False:
         ball.draw()
