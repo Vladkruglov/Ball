@@ -102,7 +102,7 @@ highlightthickness=0, background = "lightblue")
 canvas.pack()
 tk.update()
 tim = time.time()
-time_pl = 0.000001
+time_pl = 0.01
 paddle1 = Paddle1(canvas, 'red')
 ball = Ball(canvas, paddle1, '#00ff00')
 cou = 0 
@@ -117,9 +117,9 @@ while True:
         time_p = int(time.time() - tim)
         coun = "Hits: {}".format(cou)
         time_play = "Time: {}".format(time_p)
-        canvas.create_rectangle(0, 0, 70, 30, fill="lightblue", outline="lightblue")
-        canvas.create_text(30, 10, text=coun)
-        canvas.create_text(30, 25, text=time_play)
+        # canvas.create_rectangle(0, 0, 70, 30, fill="lightblue", outline="lightblue")
+        # canvas.create_text(30, 10, text=coun)
+        # canvas.create_text(30, 25, text=time_play)
     elif ball.hit_bottom == True:
         print("GAME OVER")
         print("Time played: {} secs".format(int(time_p)))
