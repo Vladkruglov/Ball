@@ -105,7 +105,7 @@ class Paddle2:
         self.x = 3
 
 tk = Tk()
-tk.title("Игра")
+tk.title("Ping Pong!")
 tk.resizable(0, 0)
 tk.wm_attributes("-topmost", 1)
 canvas = Canvas(tk, width=700, height=700, bd=0,
