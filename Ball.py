@@ -6,13 +6,13 @@ class Ball:
         "Initialize ball settings"
         self.canvas = canvas
         self.paddle1 = paddle1
-        self.id = canvas.create_oval(-7.5, -7.5, 7.5, 7.5, fill=color, outline="darkgreen")
-        self.canvas.move(self.id, 350, 350)
+        self.id = canvas.create_oval(-7.5, -7.5, 7.5, 7.5, fill=color, outline="DarkOrange4")
+        self.canvas.move(self.id, 250, 350)
         starts = [-3, -2, -1, 1, 2, 3]
         random.shuffle(starts)
         self.x1 = starts[0]
         clor = [-1.5, 1.5]
-        self.side = 'BLU'
+        self.side = 'BLACK'
         self.y1 = random.choice(clor)
         if self.y1 == 1.5:
             self.side = 'RED'
@@ -72,7 +72,7 @@ class Paddle1:
         "Initialize paddle1 settings"
         self.canvas = canvas
         self.id = canvas.create_rectangle(0, 0, 100, 5, fill=color, outline="darkred")
-        self.canvas.move(self.id, 300, 672)
+        self.canvas.move(self.id, 200, 672)
         self.x = 0
         self.canvas_width = self.canvas.winfo_width()
         self.canvas.bind_all('<KeyPress-Left>', self.turn_left1)
@@ -96,8 +96,8 @@ class Paddle2:
     def __init__(self, canvas, color):
         "Initialize BLU team paddle"
         self.canvas = canvas
-        self.id = canvas.create_rectangle(0, 0, 100, 5, fill=color, outline="darkblue")
-        self.canvas.move(self.id, 300, 28)
+        self.id = canvas.create_rectangle(0, 0, 100, 5, fill=color, outline="black")
+        self.canvas.move(self.id, 200, 28)
         self.x = 0
         self.canvas_width = self.canvas.winfo_width()
         self.canvas.bind_all('a', self.turn_left1)
@@ -121,15 +121,24 @@ tk = Tk()
 tk.title("Ping Pong!")
 tk.resizable(0, 0)
 tk.wm_attributes("-topmost", 1)
-canvas = Canvas(tk, width=700, height=700, bd=0,
-highlightthickness=0, background = "khaki")
+canvas = Canvas(tk, width=500, height=700, bd=0,
+highlightthickness=0, background = "dodgerblue")
 canvas.pack()
 tk.update()
-tim = time.time()
+canvas.create_rectangle(0, 345, 700, 355, fill='white', outline = 'white')
+canvas.create_rectangle(0, 0, 5, 700, fill='white', outline = 'white')
+canvas.create_rectangle(495, 0, 500, 700, fill='white', outline = 'white')
+canvas.create_rectangle(245, 700, 255, 0, fill='white', outline = 'white')
+canvas.create_rectangle(0, 349, 700, 351, fill='black', outline = 'black')
+canvas.create_rectangle(0, 695, 700, 700, fill='white', outline = 'white')
+canvas.create_rectangle(0, 5, 700, 0, fill='white', outline = 'white')
+canvas.update()
+canvas.update_idletasks()
+
 time_pl = 0.01
 paddle1 = Paddle1(canvas, 'red')
-paddle2 = Paddle2(canvas, 'blue')
-ball = Ball(canvas, paddle1,paddle2, '#00ff00')
+paddle2 = Paddle2(canvas, 'black')
+ball = Ball(canvas, paddle1,paddle2, 'darkorange')
 cou = 0 
 ball.draw()
 coured = ball.counterred(cou)
@@ -139,6 +148,7 @@ paddle2.draw()
 tk.update_idletasks()
 tk.update()
 time.sleep(5)
+tim = time.time()
 print("Started with: {}".format(ball.side))
 while True:
     if ball.hit_red == False and ball.hit_blu == False:
@@ -151,6 +161,7 @@ while True:
         tk.update()
         time.sleep(time_pl)
         time_p = int(time.time() - tim)
+        time_pl = time_pl - 0.000000001
         # canvas.create_rectangle(0, 0, 70, 30, fill="lightblue", outline="lightblue")
         # canvas.create_text(30, 10, text=coun)
         # canvas.create_text(30, 25, text=time_play)
@@ -160,9 +171,9 @@ while True:
         if ball.hit_blu == True:
             print("RED IS THE WINNER!!!")
         elif ball.hit_red == True:
-            print("BLU IS THE WINNER!!!")
+            print("BLACK IS THE WINNER!!!")
         print("Time played: {} secs".format(int(time_p)))
         print("Hits RED: {}".format(int(coured)))
-        print("Hits BLU: {}".format(int(coublu)))
+        print("Hits BLACK: {}".format(int(coublu)))
         time.sleep(2.5)
         break
