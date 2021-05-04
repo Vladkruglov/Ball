@@ -96,7 +96,7 @@ class Paddle2:
     def __init__(self, canvas, color):
         "Initialize BLU team paddle"
         self.canvas = canvas
-        self.id = canvas.create_rectangle(0, 0, 1, 5, fill=color, outline="black")
+        self.id = canvas.create_rectangle(0, 0, 100, 5, fill=color, outline="black")
         self.canvas.move(self.id, 200, 28)
         self.x = 0
         self.canvas_width = self.canvas.winfo_width()
@@ -117,8 +117,8 @@ class Paddle2:
     def kick_easy(self, ball):
         ball_pos = list(canvas.coords(ball.id))
         pad_pos = list(canvas.coords(self.id))    
-        ran = random.randint(0,50)    
-        if ran == 50:
+        ran = random.randint(0,25)    
+        if ran == 25:
             for i in range(0,10):
                 self.x = 0   
 
@@ -131,8 +131,8 @@ class Paddle2:
     def kick_medium(self, ball):
         ball_pos = list(canvas.coords(ball.id))
         pad_pos = list(canvas.coords(self.id))    
-        ran = random.randint(0,150)    
-        if ran == 150:
+        ran = random.randint(0,50)    
+        if ran == 50:
             for i in range(0,10):
                 self.x = 0   
 
@@ -145,8 +145,8 @@ class Paddle2:
     def kick_high(self, ball):
         ball_pos = list(canvas.coords(ball.id))
         pad_pos = list(canvas.coords(self.id))    
-        ran = random.randint(0,250)    
-        if ran == 250:
+        ran = random.randint(0,100)    
+        if ran == 100:
             for i in range(0,10):
                 self.x = 0   
 
