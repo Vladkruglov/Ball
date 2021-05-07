@@ -169,8 +169,24 @@ while True:
     elif ball.hit_red == True or ball.hit_blu == True:
         print("GAME OVER")
         if ball.hit_blu == True:
+            for i in range(0,50):
+                ball.y1 = -1
+                ball.draw()
+                paddle1.draw()
+                paddle2.draw()
+                tk.update_idletasks()
+                tk.update()
+                time.sleep(time_pl)
             print("RED IS THE WINNER!!!")
         elif ball.hit_red == True:
+            for i in range(0,50):
+                ball.y1 = 1
+                ball.draw()
+                paddle1.draw()
+                paddle2.draw()
+                tk.update_idletasks()
+                tk.update()
+                time.sleep(time_pl)
             print("BLACK IS THE WINNER!!!")
         print("Time played: {} secs".format(int(time_p)))
         print("Hits RED: {}".format(int(coured)))

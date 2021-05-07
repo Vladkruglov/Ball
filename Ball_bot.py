@@ -1,4 +1,5 @@
 from tkinter import Canvas, Tk
+# import pygame
 import random
 import time
 class Ball:
@@ -65,6 +66,19 @@ class Ball:
         if self.hit_paddle2(pos) == True:
             cou = cou + 1
         return cou
+    
+    def sound(self, pyg):
+        pos = self.canvas.coords(self.id)
+        if pos[0] <= 0 or pos[2] >= 400:
+            pyg.mixer.init()
+            pyg.mixer.music.load("Sounds/Стол1.mp3")
+            pyg.mixer.music.play()
+        if self.hit_paddle1 == True or self.hit_paddle2 == True:
+            sounds = ["Sounds/Ракетка1.mp3", "Sounds/Ракетка2.mp3"]
+            pyg.mixer.init()
+            pyg.mixer.music.load(random.choice(sounds))
+            pyg.mixer.music.play()
+        
 
         
 class Paddle1:
@@ -227,8 +241,24 @@ while True:
     elif ball.hit_red == True or ball.hit_blu == True:
         print("GAME OVER")
         if ball.hit_blu == True:
+            for i in range(0,50):
+                ball.y1 = -1
+                ball.draw()
+                paddle1.draw()
+                paddle2.draw()
+                tk.update_idletasks()
+                tk.update()
+                time.sleep(time_pl)
             print("RED IS THE WINNER!!!")
         elif ball.hit_red == True:
+            for i in range(0,50):
+                ball.y1 = 1
+                ball.draw()
+                paddle1.draw()
+                paddle2.draw()
+                tk.update_idletasks()
+                tk.update()
+                time.sleep(time_pl)
             print("BLACK IS THE WINNER!!!")
         print("Time played: {} secs".format(int(time_p)))
         print("Hits RED: {}".format(int(coured)))
