@@ -131,8 +131,8 @@ class Paddle2:
     def kick_medium(self, ball):
         ball_pos = list(canvas.coords(ball.id))
         pad_pos = list(canvas.coords(self.id))    
-        ran = random.randint(0,50)    
-        if ran == 50:
+        ran = random.randint(0,37)    
+        if ran == 37:
             for i in range(0,10):
                 self.x = 0   
 
@@ -145,8 +145,8 @@ class Paddle2:
     def kick_high(self, ball):
         ball_pos = list(canvas.coords(ball.id))
         pad_pos = list(canvas.coords(self.id))    
-        ran = random.randint(0,100)    
-        if ran == 100:
+        ran = random.randint(0,50)    
+        if ran == 50:
             for i in range(0,10):
                 self.x = 0   
 
@@ -212,7 +212,7 @@ while True:
             paddle2.kick_medium(ball)
         elif dif == "h":
             paddle2.kick_high(ball)
-        elif dif == "i":
+        elif dif == "i" or dif != 'e' and dif != 'm' and dif != 'h':
             paddle2.kick_imp(ball)
         paddle2.draw()
         tk.update_idletasks()
