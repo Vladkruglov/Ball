@@ -7,14 +7,14 @@ class Ball:
         self.canvas = canvas
         self.paddle1 = paddle1
         self.id = canvas.create_oval(-7.5, -7.5, 7.5, 7.5, fill=color, outline="DarkOrange4")
-        self.canvas.move(self.id, 250, 350)
+        self.canvas.move(self.id, 350, 225)
         starts = [-3, -2, -1, 1, 2, 3]
         random.shuffle(starts)
-        self.x1 = starts[0]
+        self.y1 = starts[0]
         clor = [-1.5, 1.5]
         self.side = 'BLACK'
-        self.y1 = random.choice(clor)
-        if self.y1 == 1.5:
+        self.x1 = random.choice(clor)
+        if self.x1 == 1.5:
             self.side = 'RED'
         self.canvas_height = self.canvas.winfo_height()
         self.paddle2 = paddle2
@@ -24,33 +24,33 @@ class Ball:
     def hit_paddle1(self, pos):
         "Locates paddle1 hits"
         paddle_pos = self.canvas.coords(self.paddle1.id)             
-        if pos[2] >= paddle_pos[0] and pos[0] <= paddle_pos[2]:          
-            if pos[3] >= paddle_pos[1] and pos[3] <= paddle_pos[3]:
+        if pos[3] >= paddle_pos[1] and pos[1] <= paddle_pos[3]:          
+            if pos[2] >= paddle_pos[0] and pos[2] <= paddle_pos[2]:
                 return True
     def hit_paddle2(self, pos):
         "Locates paddle2 hits"
         paddle_pos = self.canvas.coords(self.paddle2.id)
-        if pos[2] >= paddle_pos[0] and pos[0] <= paddle_pos[2]:
-            if pos[1] <= paddle_pos[3] and pos[1] >= paddle_pos[1]:
+        if pos[3] >= paddle_pos[1] and pos[1] <= paddle_pos[3]:
+            if pos[0] <= paddle_pos[2] and pos[0] >= paddle_pos[0]:
                 return True
     def draw(self):
         "Draws ball"
         self.canvas.move(self.id, self.x1, self.y1)
         pos = self.canvas.coords(self.id)
+        if pos[3] <= 0:
+            self.x1 = 3
+        if pos[0] >= self.canvas_width:
+            self.hit_red = True
+        if pos[2] <= 0:
+            self.hit_blu = True
+        if self.hit_paddle1(pos) == True:
+            self.x1 = -3
+        if self.hit_paddle2(pos) == True:
+            self.x1 = 3
         if pos[1] <= 0:
             self.y1 = 3
         if pos[3] >= self.canvas_height:
-            self.hit_red = True
-        if pos[1] <= 0:
-            self.hit_blu = True
-        if self.hit_paddle1(pos) == True:
             self.y1 = -3
-        if self.hit_paddle2(pos) == True:
-            self.y1 = 3
-        if pos[0] <= 0:
-            self.x1 = 3
-        if pos[2] >= self.canvas_width:
-            self.x1 = -3
 
     def counterred(self, cou):
         "Counts hits for RED team"
@@ -71,66 +71,82 @@ class Paddle1:
     def __init__(self, canvas, color):
         "Initialize paddle1 settings"
         self.canvas = canvas
-        self.id = canvas.create_rectangle(0, 0, 100, 5, fill=color, outline="darkred")
-        self.canvas.move(self.id, 200, 672)
-        self.x = 0
-        self.canvas_width = self.canvas.winfo_width()
+        self.id = canvas.create_rectangle(0, 100, 5, 0, fill=color, outline="darkred")
+        self.canvas.move(self.id, 672, 200)
+        self.y = 0
+        self.canvas_height = self.canvas.winfo_height()
         self.canvas.bind_all('<KeyPress-Left>', self.turn_left1)
         self.canvas.bind_all('<KeyPress-Right>', self.turn_right1)
     def draw(self):
         "Draws RED paddle"
-        self.canvas.move(self.id, self.x, 0)
+        self.canvas.move(self.id, 0, self.y)
         pos = self.canvas.coords(self.id)
-        if pos[0] <= 0:
-            self.x = 0
-        elif pos[2] >= self.canvas_width:
-            self.x = 0
+        if pos[1] <= 0:
+            self.y = 0
+        elif pos[3] >= self.canvas_height:
+            self.y = 0
     def turn_left1(self, evt):
         "Moves paddle left"
-        self.x = -3
+        pos = canvas.coords(self.id)
+        if pos[3] < 450:
+            self.y = 3
+        elif pos[3] >= 450:
+            self.x = 0
+
     def turn_right1(self, evt):
         "Moves paddle right"
-        self.x = 3
+        pos = canvas.coords(self.id)
+        if pos[1] > 0:
+            self.y = -3
+        elif pos[1] <= 0:
+            self.x = 0
 
 class Paddle2:
     def __init__(self, canvas, color):
-        "Initialize BLU team paddle"
+        "Initialize paddle1 settings"
         self.canvas = canvas
-        self.id = canvas.create_rectangle(0, 0, 100, 5, fill=color, outline="black")
-        self.canvas.move(self.id, 200, 28)
-        self.x = 0
-        self.canvas_width = self.canvas.winfo_width()
+        self.id = canvas.create_rectangle(0, 100, 5, 0, fill=color, outline="black")
+        self.canvas.move(self.id, 18, 200)
+        self.y = 0
+        self.canvas_height = self.canvas.winfo_height()
         self.canvas.bind_all('a', self.turn_left1)
         self.canvas.bind_all('d', self.turn_right1)
     def draw(self):
-        "Draws BLU paddle"
-        self.canvas.move(self.id, self.x, 0)
+        "Draws RED paddle"
+        self.canvas.move(self.id, 0, self.y)
         pos = self.canvas.coords(self.id)
-        if pos[0] <= 0:
-            self.x = 0
-        elif pos[2] >= self.canvas_width:
-            self.x = 0
+        if pos[1] <= 0:
+            self.y = 0
+        elif pos[3] >= self.canvas_height:
+            self.y = 0
     def turn_left1(self, evt):
-        "Turns paddle left"
-        self.x = -3
+        pos = canvas.coords(self.id)
+        "Moves paddle left"
+        if pos[1] > 0:
+            self.y = -3
+        elif pos[1] <= 0:
+            self.y = 0
     def turn_right1(self, evt):
-        "Turns paddle right"
-        self.x = 3
-
+        "Moves paddle right"
+        pos = canvas.coords(self.id)
+        if pos[3] < 450:
+            self.y = 3
+        elif pos[3] >= 450:
+            self.y = 0
 tk = Tk()
 tk.title("Ping Pong!")
 tk.resizable(0, 0)
 tk.wm_attributes("-topmost", 1)
-canvas = Canvas(tk, width=500, height=700, bd=0,
+canvas = Canvas(tk, width=700, height=450, bd=0,
 highlightthickness=0, background = "dodgerblue")
 canvas.pack()
 tk.update()
-canvas.create_rectangle(0, 345, 700, 355, fill='white', outline = 'white')
+canvas.create_rectangle(345, 0, 355, 700, fill='white', outline = 'white')
 canvas.create_rectangle(0, 0, 5, 700, fill='white', outline = 'white')
-canvas.create_rectangle(495, 0, 500, 700, fill='white', outline = 'white')
-canvas.create_rectangle(245, 700, 255, 0, fill='white', outline = 'white')
-canvas.create_rectangle(0, 349, 700, 351, fill='black', outline = 'black')
-canvas.create_rectangle(0, 695, 700, 700, fill='white', outline = 'white')
+canvas.create_rectangle(695, 0, 700, 700, fill='white', outline = 'white')
+canvas.create_rectangle(700, 220, 0, 230, fill='white', outline = 'white')
+canvas.create_rectangle(349, 0, 351, 700, fill='black', outline = 'black')
+canvas.create_rectangle(0, 445, 700, 450, fill='white', outline = 'white')
 canvas.create_rectangle(0, 5, 700, 0, fill='white', outline = 'white')
 canvas.update()
 canvas.update_idletasks()
