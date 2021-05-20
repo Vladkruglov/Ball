@@ -1,4 +1,5 @@
 from tkinter import Canvas, Tk
+# import pygame
 import random
 import time
 class Ball:
@@ -6,7 +7,7 @@ class Ball:
         "Initialize ball settings"
         self.canvas = canvas
         self.paddle1 = paddle1
-        self.id = canvas.create_oval(-7.5, -7.5, 7.5, 7.5, fill=color, outline="DarkOrange4")
+        self.id = canvas.create_oval(-7.5, -7.5, 7.5, 7.5, fill=color, outline="DarkOrange3")
         self.canvas.move(self.id, 350, 225)
         starts = [-3, -2, -1, 1, 2, 3]
         random.shuffle(starts)
@@ -66,17 +67,29 @@ class Ball:
             cou = cou + 1
         return cou
 
+    
+    def sound(self, pyg):
+        pos = self.canvas.coords(self.id)
+        if pos[0] <= 0 or pos[2] >= 400:
+            pyg.mixer.init()
+            pyg.mixer.music.load("Sounds/Стол1.mp3")
+            pyg.mixer.music.play()
+        if self.hit_paddle1 == True or self.hit_paddle2 == True:
+            sounds = ["Sounds/Ракетка1.mp3", "Sounds/Ракетка2.mp3"]
+            pyg.mixer.init()
+            pyg.mixer.music.load(random.choice(sounds))
+            pyg.mixer.music.play()
         
+
+
 class Paddle1:
     def __init__(self, canvas, color):
         "Initialize paddle1 settings"
         self.canvas = canvas
         self.id = canvas.create_rectangle(0, 100, 5, 0, fill=color, outline="darkred")
-        self.canvas.move(self.id, 672, 200)
+        self.canvas.move(self.id, 672, 175)
         self.y = 0
         self.canvas_height = self.canvas.winfo_height()
-        self.canvas.bind_all('<KeyPress-Down>', self.turn_left1)
-        self.canvas.bind_all('<KeyPress-Up>', self.turn_right1)
     def draw(self):
         "Draws RED paddle"
         self.canvas.move(self.id, 0, self.y)
@@ -85,32 +98,82 @@ class Paddle1:
             self.y = 0
         elif pos[3] >= self.canvas_height:
             self.y = 0
-    def turn_left1(self, evt):
+    def turn_left1(self):
         "Moves paddle left"
         pos = canvas.coords(self.id)
         if pos[3] < 450:
             self.y = 3
         elif pos[3] >= 450:
-            self.x = 0
+            self.y = 0
 
-    def turn_right1(self, evt):
+    def turn_right1(self):
         "Moves paddle right"
         pos = canvas.coords(self.id)
         if pos[1] > 0:
             self.y = -3
         elif pos[1] <= 0:
-            self.x = 0
+            self.y = 0
+    def kick_easy(self, ball):
+        ball_pos = list(canvas.coords(ball.id))
+        pad_pos = list(canvas.coords(self.id))    
+        ran = random.randint(0,25)    
+        if ran == 25:
+            for i in range(0,10):
+                self.y = 0   
+
+        elif ball_pos[1] > pad_pos[1]:
+            self.turn_right1()
+
+        elif ball_pos[3] < pad_pos[3]:
+            self.turn_left1()
+
+    def kick_medium(self, ball):
+        ball_pos = list(canvas.coords(ball.id))
+        pad_pos = list(canvas.coords(self.id))    
+        ran = random.randint(0,37)    
+        if ran == 37:
+            for i in range(0,10):
+                self.y = 0   
+
+        elif ball_pos[1] < pad_pos[1]:
+            self.turn_right1()
+
+        elif ball_pos[3] > pad_pos[3]:
+            self.turn_left1()
+
+    def kick_high(self, ball):
+        ball_pos = list(canvas.coords(ball.id))
+        pad_pos = list(canvas.coords(self.id))    
+        ran = random.randint(0,50)    
+        if ran == 50:
+            for i in range(0,10):
+                self.y = 0   
+
+        elif ball_pos[1] < pad_pos[1]:
+            self.turn_right1()
+
+        elif ball_pos[3] > pad_pos[3]:
+            self.turn_left1()
+
+    def kick_imp(self, ball):
+        ball_pos = list(canvas.coords(ball.id))
+        pad_pos = list(canvas.coords(self.id))     
+        if ball_pos[1] < pad_pos[1]:
+            self.turn_right1()
+
+        elif ball_pos[3] > pad_pos[3]:
+            self.turn_left1()
+                                                           
+
 
 class Paddle2:
     def __init__(self, canvas, color):
         "Initialize paddle1 settings"
         self.canvas = canvas
         self.id = canvas.create_rectangle(0, 100, 5, 0, fill=color, outline="black")
-        self.canvas.move(self.id, 18, 200)
+        self.canvas.move(self.id, 18, 175)
         self.y = 0
         self.canvas_height = self.canvas.winfo_height()
-        self.canvas.bind_all('w', self.turn_left1)
-        self.canvas.bind_all('s', self.turn_right1)
     def draw(self):
         "Draws RED paddle"
         self.canvas.move(self.id, 0, self.y)
@@ -119,20 +182,75 @@ class Paddle2:
             self.y = 0
         elif pos[3] >= self.canvas_height:
             self.y = 0
-    def turn_left1(self, evt):
-        pos = canvas.coords(self.id)
+    def turn_left1(self):
         "Moves paddle left"
+        pos = canvas.coords(self.id)
         if pos[1] > 0:
             self.y = -3
         elif pos[1] <= 0:
             self.y = 0
-    def turn_right1(self, evt):
+
+    def turn_right1(self):
         "Moves paddle right"
         pos = canvas.coords(self.id)
         if pos[3] < 450:
             self.y = 3
         elif pos[3] >= 450:
-            self.y = 0
+            self.y = 0    
+    def kick_easy(self, ball):
+        ball_pos = list(canvas.coords(ball.id))
+        pad_pos = list(canvas.coords(self.id))    
+        ran = random.randint(0,25)    
+        if ran == 25:
+            for i in range(0,10):
+                self.y = 0   
+
+        elif ball_pos[1] < pad_pos[1]:
+            self.turn_left1()
+
+        elif ball_pos[3] > pad_pos[3]:
+            self.turn_right1()
+
+    def kick_medium(self, ball):
+        ball_pos = list(canvas.coords(ball.id))
+        pad_pos = list(canvas.coords(self.id))    
+        ran = random.randint(0,37)    
+        if ran == 37:
+            for i in range(0,10):
+                self.y = 0   
+
+        elif ball_pos[1] < pad_pos[1]:
+            self.turn_left1()
+
+        elif ball_pos[3] > pad_pos[3]:
+            self.turn_right1()
+
+    def kick_high(self, ball):
+        ball_pos = list(canvas.coords(ball.id))
+        pad_pos = list(canvas.coords(self.id))    
+        ran = random.randint(0,50)    
+        if ran == 50:
+            for i in range(0,10):
+                self.y = 0   
+
+        elif ball_pos[1] < pad_pos[1]:
+            self.turn_left1()
+
+        elif ball_pos[3] > pad_pos[3]:
+            self.turn_right1()
+
+    def kick_imp(self, ball):
+        ball_pos = list(canvas.coords(ball.id))
+        pad_pos = list(canvas.coords(self.id))     
+        if ball_pos[1] < pad_pos[1]:
+            self.turn_left1()
+
+        elif ball_pos[3] > pad_pos[3]:
+            self.turn_right1()
+                                                           
+
+dif1 = input("Select level for first bot(e, m, h, i): ")
+dif2 = input("Select level for second bot(e, m, h, i): ")
 tk = Tk()
 tk.title("Ping Pong!")
 tk.resizable(0, 0)
@@ -171,7 +289,23 @@ while True:
         ball.draw()
         coured = ball.counterred(coured)
         coublu = ball.counterblu(coublu)
+        if dif1 == "e":
+            paddle1.kick_easy(ball)
+        elif dif1 == "m":
+            paddle1.kick_medium(ball)
+        elif dif1 == "h":
+            paddle1.kick_high(ball)
+        elif dif1 == "i" or dif1 != 'e' and dif1 != 'm' and dif1 != 'h':
+            paddle1.kick_imp(ball)
         paddle1.draw()
+        if dif2 == "e":
+            paddle2.kick_easy(ball)
+        elif dif2 == "m":
+            paddle2.kick_medium(ball)
+        elif dif2 == "h":
+            paddle2.kick_high(ball)
+        elif dif2 == "i" or dif2 != 'e' and dif2 != 'm' and dif2 != 'h':
+            paddle2.kick_imp(ball)
         paddle2.draw()
         tk.update_idletasks()
         tk.update()
@@ -208,4 +342,5 @@ while True:
         print("Hits RED: {}".format(int(coured)))
         print("Hits BLACK: {}".format(int(coublu)))
         time.sleep(2.5)
-        break
+        break        
+        

@@ -7,7 +7,7 @@ class Ball:
         "Initialize ball settings"
         self.canvas = canvas
         self.paddle1 = paddle1
-        self.id = canvas.create_oval(-7.5, -7.5, 7.5, 7.5, fill=color, outline="DarkOrange4")
+        self.id = canvas.create_oval(-7.5, -7.5, 7.5, 7.5, fill=color, outline="DarkOrange3")
         self.canvas.move(self.id, 350, 225)
         starts = [-3, -2, -1, 1, 2, 3]
         random.shuffle(starts)
@@ -90,8 +90,8 @@ class Paddle1:
         self.canvas.move(self.id, 672, 175)
         self.y = 0
         self.canvas_height = self.canvas.winfo_height()
-        self.canvas.bind_all('<KeyPress-Left>', self.turn_left1)
-        self.canvas.bind_all('<KeyPress-Right>', self.turn_right1)
+        self.canvas.bind_all('<KeyPress-Down>', self.turn_left1)
+        self.canvas.bind_all('<KeyPress-Up>', self.turn_right1)
     def draw(self):
         "Draws RED paddle"
         self.canvas.move(self.id, 0, self.y)
@@ -106,7 +106,7 @@ class Paddle1:
         if pos[3] < 450:
             self.y = 3
         elif pos[3] >= 450:
-            self.x = 0
+            self.y = 0
 
     def turn_right1(self, evt):
         "Moves paddle right"
@@ -114,7 +114,7 @@ class Paddle1:
         if pos[1] > 0:
             self.y = -3
         elif pos[1] <= 0:
-            self.x = 0
+            self.y = 0
 
 class Paddle2:
     def __init__(self, canvas, color):
